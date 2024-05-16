@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* RichTextEditor.css */
+.ql-snow * {
+  padding: 0;
+ 
+}
+
+.richTextEditorContainer {
+  position: relative;
+  width: 90%;
+  
+  /* padding-top: 40px; */
+}
+
+/* Toolbar styles */
+.richTextEditorContainer .ql-toolbar {
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.richTextEditorContainer:hover .ql-toolbar {
+  opacity: 1;
+  visibility: visible;
+}
+.ql-toolbar.ql-snow + .ql-container.ql-snow{
+  border: none;
+}
+.ql-editor {
+  min-height: 4em;
+  border:none;
+}
+.ql-editor:hover {
+  border: #ffb600 dashed 1px;
+}
+.ql-container.ql-snow {
+  border: none;
+}
+@media only screen and (max-width: 468px) {
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 0;
+  }
+}
+
+
+/* richtext styles */
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
