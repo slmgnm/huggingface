@@ -46,10 +46,12 @@ const CVForm = () => {
     }));
   };
   const handleBio = (newBio: string) => {
-    setFormData((prevData: any) => ({
-      ...prevData,
-      bio: newBio,
-    }));
+    if (newBio !== formData.bio) {
+      setFormData((prevData: any) => ({
+        ...prevData,
+        bio: newBio,
+      }));
+    }
   };
   const addField = (fieldName: string) => {
     setFormData((prevState: any) => ({
@@ -316,11 +318,11 @@ const CVForm = () => {
                 <AddCircleOutlineIcon onClick={() => addField("experience")} />
               </button>
             </div>
-            <div className="pb-16">
+            <div className="pb-16 group">
               <h2>Education</h2>
               <hr className="border-yellow-500 mt-1 mb-1" />
               {formData.education.map((edu: any, index: number) => (
-                <div className="flex flex-row mb-1 relative" key={index}>
+                <div className="flex flex-row mb-1 relative " key={index}>
                   <RichTextEditor
                     value={edu}
                     onChange={(newEd) => handleEdChange(index, newEd)}
@@ -333,7 +335,7 @@ const CVForm = () => {
                   </button>
                 </div>
               ))}
-              <button className="mt-8 bg-transparent border-none cursor-pointer">
+              <button className="mt-8  hidden group-hover:block bg-transparent w-12 h-12 border-none cursor-pointer">
                 <AddCircleOutlineIcon onClick={() => addField("education")} />
               </button>
             </div>

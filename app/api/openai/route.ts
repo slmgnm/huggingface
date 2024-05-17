@@ -1,4 +1,6 @@
-// /pages/api/generate-cv.js
+import OpenAI from "openai";
+
+const openai = new OpenAI();
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!process.env.HUGGING_FACE_TOKEN) {
+    if (!process.env.OPENAI_API_KEY) {
       return new Response(
         JSON.stringify({ error: "Missing 'Hugging Face Access Token'" }),
         {
@@ -25,38 +27,25 @@ export async function POST(request: Request) {
     }
 
     const input = requestBody.inputs;
-    const token = process.env.HUGGING_FACE_TOKEN;
+    const token = process.env.OPENAI_API_KEY;
 
     console.log("Using token:", token); // Debugging line
 
-    const response = await fetch(
-      "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ inputs: input, max_length: 200 }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorDetail = await response.json();
-      console.error("Hugging Face API Error:", errorDetail);
-      return new Response(
-        JSON.stringify({ error: "Request Failed", detail: errorDetail }),
+    const completion = await openai.chat.completions.create({
+      messages: [
         {
-          status: response.status,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
+          role: "system",
+          content:
+            "You are a helpful assistant specialized in creating short bio based on a resume.",
+        },
+        { role: "user", content: input },
+      ],
+      model: "gpt-3.5-turbo",
+    });
 
-    const data = await response.json();
+    const data = completion.choices[0];
     console.log("data", data);
-    const generatedText =
-      data[0]?.generated_text || "No generated text available";
+    const generatedText = data.message.content || "No generated text available";
     return new Response(JSON.stringify(generatedText), {
       headers: {
         "Content-Type": "application/json",

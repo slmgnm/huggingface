@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Portfolio from "../../public/assets/portfolio-svgrepo-com.svg";
+import Image from "next/image";
 // import "./PDFForm.css";
 export default function socialLinks({
   formData,
@@ -66,7 +67,7 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={linkedInInput} arrow>
-          <img
+          <Image
             src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
             alt="linkedin"
             width="20"
@@ -81,14 +82,12 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={portfolioInput} arrow>
-          <img
-            src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/svgs/solid/briefcase.svg"
-            alt="portfolio"
+        <Image
+            src={Portfolio}
+            alt="Portfolio"
             width="20"
             height="20"
           />
-
-          {/* <Portfolio width="20" height="20" fill="blue" stroke="red"/> */}
         </Tooltip>
       </a>
     </div>
