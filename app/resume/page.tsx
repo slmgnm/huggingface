@@ -10,9 +10,11 @@ import SocialLinks from "../components/SocialLinks";
 import placeholder from "../../public/assets/user.png";
 import RichTextEditor from "../components/RichText";
 import Image from "next/image.js";
-const CVForm = () => {
+import { useAppContext } from "../context/AppContext";
+export default function CVForm() {
   const pdfExportComponent = useRef(null);
   const storedData = localStorage.getItem("formData");
+  const { state, setState } = useAppContext();
   const initialFormData = storedData
     ? JSON.parse(storedData)
     : {
@@ -36,8 +38,10 @@ const CVForm = () => {
   useEffect(() => {
     // storing input name
     localStorage.setItem("formData", JSON.stringify(formData));
+    setState(formData);
   }, [formData]);
   console.log("formData", formData);
+  console.log("state", state);
 
   const handleLinkChange = (socialMedia: string, link: string) => {
     setFormData((prevData: any) => ({
@@ -352,6 +356,4 @@ const CVForm = () => {
       </div>
     </div>
   );
-};
-
-export default CVForm;
+}

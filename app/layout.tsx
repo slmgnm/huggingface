@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AppProvider } from "./context/AppContext";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./PDFForm.css";
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AppProvider>{children}</AppProvider>
+      </body>
     </html>
   );
 }
