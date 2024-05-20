@@ -10,7 +10,7 @@ import SocialLinks from "../components/SocialLinks";
 import placeholder from "../../public/assets/user.png";
 import RichTextEditor from "../components/RichText";
 import Image from "next/image.js";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../../context/AppContext";
 export default function CVForm() {
   const pdfExportComponent = useRef(null);
   const storedData = localStorage.getItem("formData");
