@@ -11,6 +11,25 @@ import placeholder from "../../public/assets/user.png";
 import RichTextEditor from "../components/RichText";
 import Image from "next/image.js";
 import { useAppContext } from "../../context/AppContext";
+import CoverHF from "../components/CoverHF";
+type FormData = {
+  name: string;
+  subtitle: string;
+  bio: string;
+  phone: string;
+  address: string;
+  email: string;
+  education: string[];
+  experience: string[];
+  skills: string[];
+  languages: string[];
+  github: string;
+  linkedin: string;
+  portfolio: string;
+  image: string;
+  companyName: string;
+  jobTitle: string;
+};
 export default function CVForm() {
   const pdfExportComponent = useRef(null);
   const storedData = localStorage.getItem("formData");
@@ -34,7 +53,8 @@ export default function CVForm() {
         image: "",
       };
   // console.log("placeholder", placeholder);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+
   useEffect(() => {
     // storing input name
     localStorage.setItem("formData", JSON.stringify(formData));
@@ -60,7 +80,9 @@ export default function CVForm() {
   const addField = (fieldName: string) => {
     setFormData((prevState: any) => ({
       ...prevState,
-      [fieldName]: [...prevState[fieldName], ""],
+      [fieldName]: Array.isArray(prevState[fieldName])
+        ? [...prevState[fieldName], ""]
+        : [""],
     }));
   };
 
@@ -83,7 +105,7 @@ export default function CVForm() {
       if (event.target) {
         setFormData({
           ...formData,
-          image: event.target.result,
+          image: event.target.result as string, // Add type assertion here
         });
       }
     };
@@ -170,10 +192,17 @@ export default function CVForm() {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="flex flex-col items-start">
+        <CoverHF
+          formData={formData}
+          setFormData={setFormData}
+          onChange={handleInputChange}
+        />
+      </div>
       <PDFExport
         ref={pdfExportComponent}
         paperSize="auto"
-        fileName={`${formData.name}-Resume`}
+        fileName={`${formData?.name}-Resume`}
       >
         <div className="flex flex-row min-h-screen w-[8.5in] mx-auto">
           <div className="flex flex-col w-[30%] max-w-[30%] bg-gray-800 text-white pt-24">
@@ -234,7 +263,7 @@ export default function CVForm() {
                   type="text"
                   name="address"
                   placeholder="address"
-                  value={formData.address}
+                  value={formData?.address}
                   onChange={handleInputChange}
                 />
               </div>
@@ -277,7 +306,7 @@ export default function CVForm() {
               <div className="mt-4">
                 <h4>Skills</h4>
                 <hr className="border-yellow-500 mt-1 mb-1" />
-                {formData.skills.map((skill: any, index: number) => (
+                {formData.skills?.map((skill: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
                       className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
@@ -304,7 +333,7 @@ export default function CVForm() {
             <div className="group mb-20">
               <h2>Experience</h2>
               <hr className="border-yellow-500 mt-1 mb-1" />
-              {formData.experience.map((exp: any, index: number) => (
+              {formData?.experience?.map((exp: any, index: number) => (
                 <div className=" flex flex-row mb-1 relative" key={index}>
                   <RichTextEditor
                     value={exp}
@@ -325,7 +354,7 @@ export default function CVForm() {
             <div className="pb-16 group">
               <h2>Education</h2>
               <hr className="border-yellow-500 mt-1 mb-1" />
-              {formData.education.map((edu: any, index: number) => (
+              {formData?.education?.map((edu: any, index: number) => (
                 <div className="flex flex-row mb-1 relative " key={index}>
                   <RichTextEditor
                     value={edu}
@@ -347,10 +376,7 @@ export default function CVForm() {
         </div>
       </PDFExport>
       <div className="pt-4 pb-4">
-        <button
-          className="block h-fit shadow-none border-0 px-8 py-4 bg-gray-800 rounded-md text-white text-sm font-medium text-center cursor-pointer transition-all duration-200 ease-in-out"
-          onClick={handleExportPDF}
-        >
+        <button className="btn btn-neutral m-3" onClick={handleExportPDF}>
           Export CV as PDF
         </button>
       </div>

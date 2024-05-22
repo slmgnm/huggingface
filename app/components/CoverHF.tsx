@@ -4,20 +4,41 @@ import GenerateIcon from "../../public/assets/plus-solid.svg";
 import RichTextEditor from "../components/RichText";
 import Loader from "./Loader";
 import Image from "next/image";
-
+import { PDFExport } from "@progress/kendo-react-pdf";
+import { on } from "events";
+type FormData = {
+  name: string;
+  subtitle: string;
+  bio: string;
+  phone: string;
+  address: string;
+  email: string;
+  education: string[];
+  experience: string[];
+  skills: string[];
+  languages: string[];
+  github: string;
+  linkedin: string;
+  portfolio: string;
+  image: string;
+  companyName: string;
+  jobTitle: string;
+};
 const CoverHF = ({
-  coverLetterData,
+  formData = {},
+  setFormData,
   onChange,
 }: {
-  coverLetterData: any;
-  onChange:(value: any) => void;
+  formData: Partial<FormData>;
+  setFormData: (value: any) => void;
+  onChange: (value: any) => void;
 }) => {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (input === "") {
-      generateBioInput();
+      generateCoverInput();
     }
     console.log("input", input);
   }, [input]);
@@ -52,17 +73,29 @@ const CoverHF = ({
       console.error("Error sending request:", err);
     }
   };
-  const generateBioInput = () => {
-    const { name, subtitle, education, experience, skills } = coverLetterData;
+  const generateCoverInput = () => {
+    const {
+      name,
+      subtitle,
+      education,
+      experience,
+      skills,
+      companyName,
+      jobTitle,
+      address,
+      email,
+      phone,
+    } = formData;
 
-    console.log("coverLetterData in generateBioInput:", coverLetterData);
+    console.log("formData in coverHF:", formData);
 
     const inputTemplate = `
 ###
-Generate a cover letter based on the following template for my CV, do not include the inputTemplate in the response or other instructions, instruction are everything between :
+Generate a cover letter in html tags with Tailwind  based on the following template for my CV, do not include the inputTemplate in the response or other instructions, instruction are everything between :
 
 
-example cover letter: [Your Name]
+example cover letter:
+ [Your Name]
 [Your Address]
 [City, State, ZIP Code]
 [Email Address]
@@ -88,49 +121,137 @@ Sincerely,
 use for my cover letter:
 Name: ${name}
 Subtitle: ${subtitle}
+email: ${email}
+phone: ${phone}
+address: ${address}
+companyName: ${companyName}
+Job Title: ${jobTitle}
+Subtitle: ${subtitle}
 Education: ${education}
 Experience: ${experience}
 Skills: ${skills}
-company's name: [Company's Name]
+company's name: ${companyName}
 ###
 `;
 
     setInput(inputTemplate);
   };
 
+  const pdfExportComponent = React.useRef<any>(null);
+  // useEffect(() => {
+  //   if (state) {
+  //     setCoverLetterData(state);
+  //   }
+  // }, [state]);
+  const handleExportPDF = () => {
+    const pdfName = `CoverLetter-${formData.name}.pdf`;
+    if (pdfExportComponent.current) {
+      pdfExportComponent.current.save(pdfName);
+    }
+  };
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   event.preventDefault();
+  //   const { name, value } = event.target;
+  //   setFormData((prevState: any) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // };
   console.log("Response", response);
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div style={{ position: "relative" }}>
-          <RichTextEditor
-            value={coverLetterData || ""}
-            onChange={onChange}
-            placeholder={`Click  on the 🤖 to add an AI-generated bio after filling other fields or write your own`}
-          />
-
-          <button
-            type="submit"
-            id="bioSubmit"
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              cursor: "pointer",
-              background: "transparent",
-              border: "none",
-
-              outline: "none",
-            }}
-          >
-            {loading ? (
-              <Loader />
-            ) : (
-              <GenerateIcon alt="Add Icon" style={{ width: 20, height: 20 }} />
-            )}
-          </button>
-        </div>
-      </form>
+    <div className="flex flex-col items-left">
+      <button
+        className="btn btn-neutral m-3"
+        onClick={() =>
+          (
+            document.getElementById("my_modal_1") as HTMLDialogElement
+          ).showModal()
+        }
+      >
+        Cover Letter
+      </button>
+      <dialog
+        id="my_modal_1"
+        className="modal flex justify-center items-center"
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-md shadow-md w-full max-w-3xl"
+        >
+          <div className="flex flex-col items-center">
+            <PDFExport
+              ref={pdfExportComponent}
+              paperSize="auto"
+              fileName={`CoverLetter-${formData?.name}`}
+            >
+              <p>{formData && formData?.name}</p>
+              <div className="flex flex-col items-center">
+                <h1 className="text-4xl font-bold mb-4">Cover Letter</h1>
+                <div className="flex flex-col items-center w-full">
+                  <div className="mb-4 w-full">
+                    <label
+                      htmlFor="companyName"
+                      className="text-lg font-medium"
+                    >
+                      Company Name:
+                    </label>
+                    <input
+                      type="text"
+                      value={formData && formData.companyName}
+                      id="companyName"
+                      className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter company name"
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div className="mb-4 w-full">
+                    <label htmlFor="jobTitle" className="text-lg font-medium">
+                      Job Title:
+                    </label>
+                    <input
+                      value={formData && formData.jobTitle}
+                      type="text"
+                      id="jobTitle"
+                      className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter job title"
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div className="relative w-full mb-4">
+                    <RichTextEditor
+                      value={response || ""}
+                      onChange={onChange}
+                      placeholder={`Click on the 🤖 to add an AI-generated bio after filling other fields or write your own`}
+                    />
+                    <button
+                      type="submit"
+                      id="bioSubmit"
+                      className="absolute top-0 right-0 mt-2 mr-2"
+                    >
+                      {loading ? (
+                        <Loader />
+                      ) : (
+                        <GenerateIcon
+                          alt="Add Icon"
+                          style={{ width: 20, height: 20 }}
+                        />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </PDFExport>
+            <div className="pt-4 pb-4">
+              <button
+                className="block h-fit shadow-none border-0 px-8 py-4 bg-gray-800 rounded-md text-white text-sm font-medium text-center cursor-pointer transition-all duration-200 ease-in-out"
+                onClick={handleExportPDF}
+              >
+                Export Cover Letter as PDF
+              </button>
+            </div>
+          </div>
+        </form>
+      </dialog>
     </div>
   );
 };
