@@ -29,7 +29,7 @@ const CoverHF = ({
   setFormData,
   onChange,
 }: {
-  formData: Partial<FormData>;
+  formData?: Partial<FormData>;
   setFormData: (value: any) => void;
   onChange: (value: any) => void;
 }) => {

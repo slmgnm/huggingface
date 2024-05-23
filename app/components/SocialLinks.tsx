@@ -82,8 +82,8 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={portfolioInput} arrow>
-        <Image
-            src={Portfolio}
+          <Image
+            src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/portfolio.svg"
             alt="Portfolio"
             width="20"
             height="20"

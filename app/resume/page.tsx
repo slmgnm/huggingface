@@ -192,20 +192,23 @@ export default function CVForm() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-col items-start">
+      {/* <div className="flex flex-col items-start">
         <CoverHF
           formData={formData}
           setFormData={setFormData}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
       <PDFExport
         ref={pdfExportComponent}
         paperSize="auto"
         fileName={`${formData?.name}-Resume`}
       >
         <div className="flex flex-row min-h-screen w-[8.5in] mx-auto">
-          <div className="flex flex-col w-[30%] max-w-[30%] bg-gray-800 text-white pt-24">
+          <div
+            data-theme="base"
+            className="flex flex-col w-[30%] max-w-[30%] bg-base-100 text-white pt-24"
+          >
             <div className="relative overflow-hidden w-full border-dashed border-yellow-600 ">
               <Image
                 src={formData.image ? formData.image : placeholder}
@@ -230,12 +233,13 @@ export default function CVForm() {
               </label>
             </div>
 
-            <div className="pt-4 pl-4 pr-4 text-left">
+            <div data-theme="base" className="pt-4 pl-4 pr-4 text-left">
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-gray-800 text-white border-none mb-0.5 text-lg w-full"
+                  className="bg-base-100  border-none mb-0.5 text-lg w-full"
                   type="text"
                   name="name"
+                  aria-label="dark"
                   placeholder="name"
                   value={formData.name}
                   onChange={handleInputChange}
@@ -243,7 +247,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100  border-none w-full mb-0.5 text-base"
                   type="text"
                   name="subtitle"
                   placeholder="Current title"
@@ -259,7 +263,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
                   type="text"
                   name="address"
                   placeholder="address"
@@ -269,7 +273,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
                   type="text"
                   name="email"
                   placeholder="email"
@@ -279,7 +283,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
                   type="text"
                   name="phone"
                   placeholder="phone"
@@ -293,7 +297,7 @@ export default function CVForm() {
                 {formData.languages.map((language: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
-                      className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                      className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
                       type="text"
                       name={`language-${index}`}
                       value={language}
@@ -305,11 +309,11 @@ export default function CVForm() {
               </div>
               <div className="mt-4">
                 <h4>Skills</h4>
-                <hr className="border-yellow-500 mt-1 mb-1" />
+                <hr className="border-base-100 mt-1 mb-1" />
                 {formData.skills?.map((skill: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
-                      className="bg-gray-800 text-white border-none w-full mb-0.5 text-base"
+                      className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
                       type="text"
                       name={`skill-${index}`}
                       value={skill}

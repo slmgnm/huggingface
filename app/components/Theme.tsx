@@ -3,7 +3,7 @@ import React from "react";
 export default function Theme() {
   return (
     <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn m-1">
+      <div tabIndex={0} role="button" className="btn btn-neutral m-3">
         Theme
         <svg
           width="12px"
@@ -24,8 +24,8 @@ export default function Theme() {
             type="radio"
             name="theme-dropdown"
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Default"
-            value="default"
+            aria-label="Luxury"
+            value="luxury"
           />
         </li>
         <li>
@@ -42,8 +42,8 @@ export default function Theme() {
             type="radio"
             name="theme-dropdown"
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Cyberpunk"
-            value="cyberpunk"
+            aria-label="Dim"
+            value="dim"
           />
         </li>
         <li>
@@ -51,8 +51,35 @@ export default function Theme() {
             type="radio"
             name="theme-dropdown"
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Valentine"
-            value="valentine"
+            aria-label="Coffee"
+            value="coffee"
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Night"
+            value="night"
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Dark"
+            value="dark"
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            aria-label="Nord"
+            value="nord"
           />
         </li>
         <li>
