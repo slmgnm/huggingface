@@ -5,6 +5,7 @@ import RichTextEditor from "../components/RichText";
 import Loader from "./Loader";
 import Image from "next/image";
 import { PDFExport } from "@progress/kendo-react-pdf";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { on } from "events";
 type FormData = {
   name: string;
@@ -29,7 +30,7 @@ const CoverHF = ({
   setFormData,
   onChange,
 }: {
-  formData?: Partial<FormData>;
+  formData: Partial<FormData>;
   setFormData: (value: any) => void;
   onChange: (value: any) => void;
 }) => {
@@ -231,9 +232,8 @@ company's name: ${companyName}
                       {loading ? (
                         <Loader />
                       ) : (
-                        <GenerateIcon
-                          alt="Add Icon"
-                          style={{ width: 20, height: 20 }}
+                        <AutoAwesomeIcon
+                        component="svg" style={{ width: 20, height: 20 }}
                         />
                       )}
                     </button>

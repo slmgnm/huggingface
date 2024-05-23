@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import GenerateIcon from "../../public/assets/plus-solid.svg";
 import RichTextEditor from "../components/RichText";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import Loader from "./Loader";
 import Image from "next/image";
 
@@ -86,7 +87,7 @@ Skills: ${skills}
           <RichTextEditor
             value={formData.bio || ""}
             onChange={onChange}
-            placeholder={`Click  on the 🤖 to add an AI-generated bio after filling other fields or write your own`}
+            placeholder={`Click  on the ✨ to add an AI-generated bio after filling other fields or write your own`}
           />
 
           <button
@@ -103,11 +104,10 @@ Skills: ${skills}
               outline: "none",
             }}
           >
-            {loading ? (
-              <Loader />
-            ) : (
-              <GenerateIcon alt="Add Icon" style={{ width: 20, height: 20 }} />
-            )}
+            <AutoAwesomeIcon
+              component="svg"
+              style={{ width: 20, height: 20 }}
+            />
           </button>
         </div>
       </form>

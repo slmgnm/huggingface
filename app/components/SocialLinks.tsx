@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Portfolio from "../../public/assets/portfolio-svgrepo-com.svg";
 import Image from "next/image";
-// import "./PDFForm.css";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+
 export default function socialLinks({
   formData,
   onGithubLinkChange,
@@ -52,12 +55,7 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={githubInput} arrow>
-          <img
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-            alt="GitHub"
-            width="20"
-            height="20"
-          />
+          <GitHubIcon component="svg" color="primary" width="20" height="20" />
         </Tooltip>
       </a>
       <a
@@ -67,9 +65,9 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={linkedInInput} arrow>
-          <Image
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
-            alt="linkedin"
+          <LinkedInIcon
+            component="svg"
+            color="primary"
             width="20"
             height="20"
           />
@@ -82,9 +80,9 @@ export default function socialLinks({
         onClick={(e) => e.preventDefault()}
       >
         <Tooltip title={portfolioInput} arrow>
-          <Image
-            src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/portfolio.svg"
-            alt="Portfolio"
+          <WorkOutlineIcon
+            component="svg"
+            color="primary"
             width="20"
             height="20"
           />

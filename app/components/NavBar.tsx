@@ -5,6 +5,7 @@ import Theme from "./Theme";
 
 export default function NavBar(): JSX.Element {
   const { state, setState } = useAppContext();
+  console.log("state in nav", state);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -14,7 +15,7 @@ export default function NavBar(): JSX.Element {
     }));
   };
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-gray-100">
       <a className="btn btn-ghost text-xl">Cv Builder</a>
       <Theme />
       <CoverHF

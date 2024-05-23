@@ -191,7 +191,7 @@ export default function CVForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pt-24">
       {/* <div className="flex flex-col items-start">
         <CoverHF
           formData={formData}
@@ -207,13 +207,13 @@ export default function CVForm() {
         <div className="flex flex-row min-h-screen w-[8.5in] mx-auto">
           <div
             data-theme="base"
-            className="flex flex-col w-[30%] max-w-[30%] bg-base-100 text-white pt-24"
+            className="flex flex-col w-[30%] max-w-[30%] bg-base-100 text-base pt-24 pb-24"
           >
             <div className="relative overflow-hidden w-full border-dashed border-yellow-600 ">
               <Image
                 src={formData.image ? formData.image : placeholder}
                 alt="Profile picture"
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full "
                 width={400}
                 height={400}
               />
@@ -236,7 +236,7 @@ export default function CVForm() {
             <div data-theme="base" className="pt-4 pl-4 pr-4 text-left">
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-base-100  border-none mb-0.5 text-lg w-full"
+                  className="bg-base-100  border-none mb-0.5 text-2xl w-full"
                   type="text"
                   name="name"
                   aria-label="dark"
@@ -247,7 +247,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-base-100  border-none w-full mb-0.5 text-base"
+                  className="bg-base-100  border-none w-full mb-0.5 text-base text-"
                   type="text"
                   name="subtitle"
                   placeholder="Current title"
@@ -293,7 +293,7 @@ export default function CVForm() {
               </div>
               <div className="mt-4">
                 <h4>Languages</h4>
-                <hr className="border-yellow-500 mt-1 mb-1" />
+                <hr className="border-primary mt-1 mb-1" />
                 {formData.languages.map((language: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
@@ -309,7 +309,7 @@ export default function CVForm() {
               </div>
               <div className="mt-4">
                 <h4>Skills</h4>
-                <hr className="border-base-100 mt-1 mb-1" />
+                <hr className="border-primary mt-1 mb-1" />
                 {formData.skills?.map((skill: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
@@ -323,20 +323,20 @@ export default function CVForm() {
                   </div>
                 ))}
               </div>
-              <hr className="border-yellow-500 mt-1 mb-1" />
+              <hr className="border-primary mt-1 mb-1" />
             </div>
           </div>
           <div className="w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border">
             <div className="mb-20">
-              <h2>Bio</h2>
-              <hr className="border-yellow-500 mt-1 mb-1" />
+              <h1 className="text-xl">Bio</h1>
+              <hr className="border-primary mt-1 mb-1" />
               <div>
                 <BioHF formData={formData} onChange={handleBio} />
               </div>
             </div>
             <div className="group mb-20">
-              <h2>Experience</h2>
-              <hr className="border-yellow-500 mt-1 mb-1" />
+              <h1 className="text-xl">Experience</h1>
+              <hr className="border-primary mt-1 mb-1" />
               {formData?.experience?.map((exp: any, index: number) => (
                 <div className=" flex flex-row mb-1 relative" key={index}>
                   <RichTextEditor
@@ -356,8 +356,8 @@ export default function CVForm() {
               </button>
             </div>
             <div className="pb-16 group">
-              <h2>Education</h2>
-              <hr className="border-yellow-500 mt-1 mb-1" />
+              <h1 className="text-xl">Education</h1>
+              <hr className="border-primary mt-1 mb-1" />
               {formData?.education?.map((edu: any, index: number) => (
                 <div className="flex flex-row mb-1 relative " key={index}>
                   <RichTextEditor
