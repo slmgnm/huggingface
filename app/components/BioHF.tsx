@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 
 import GenerateIcon from "../../public/assets/plus-solid.svg";
@@ -5,6 +6,7 @@ import RichTextEditor from "../components/RichText";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import Loader from "./Loader";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
 
 const BioHF = ({
   formData,
@@ -16,6 +18,7 @@ const BioHF = ({
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const { state, setState } = useAppContext();
   useEffect(() => {
     if (input === "") {
       generateBioInput();
