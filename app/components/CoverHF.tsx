@@ -7,6 +7,7 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 import { useAppContext } from "@/context/AppContext";
+import { Stream } from "@mui/icons-material";
 
 type FormData = {
   name: string;
@@ -45,6 +46,8 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
 
     try {
       setLoading(true);
+      setResponse(""); // Clear the previous response
+
       const res = await fetch("/api/openai", {
         method: "POST",
         headers: {
@@ -54,22 +57,34 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
         body: JSON.stringify({
           inputs: input,
           tokens: 200,
+          stream: true, // Enable streaming
         }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      if (res.ok && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+
+        // Continuously read and append chunks to the response
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          setResponse((prev) => prev + chunk);
+        }
+
         setLoading(false);
-        setResponse(data.replace(/###[\s\S]*?###/g, ""));
-        onChange(data.replace(/###[\s\S]*?###/g, ""));
       } else {
         const errorDetail = await res.json();
         console.error("Error sending request:", errorDetail);
+        setLoading(false);
       }
     } catch (err) {
       console.error("Error sending request:", err);
+      setLoading(false);
     }
   };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target) {
       console.error("Event target is undefined");
@@ -95,7 +110,6 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
       address,
       email,
       phone,
-      
     } = state || {};
 
     console.log("state in coverHF:", companyName, jobTitle);
@@ -211,7 +225,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
                 </div>
                 <PDFExport
                   ref={pdfExportComponent}
-                  paperSize="auto"
+                  paperSize="a4"
                   fileName={`CoverLetter-${state?.name}`}
                 >
                   <div className="relative w-full mb-4">

@@ -28,9 +28,11 @@ const BioHF = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+  
     try {
       setLoading(true);
+      setResponse(''); // Clear the previous response
+  
       const res = await fetch("/api/openai", {
         method: "POST",
         headers: {
@@ -42,20 +44,33 @@ const BioHF = ({
           tokens: 200,
         }),
       });
-
-      if (res.ok) {
-        const data = await res.json();
+  
+      if (res.ok && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let result = '';
+        let done = false;
+  
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          result += decoder.decode(value, { stream: true });
+          setResponse((prev) => prev + result);
+          onChange(result);
+        }
+  
         setLoading(false);
-        setResponse(data.replace(/###[\s\S]*?###/g, ""));
-        onChange(data.replace(/###[\s\S]*?###/g, ""));
       } else {
         const errorDetail = await res.json();
         console.error("Error sending request:", errorDetail);
+        setLoading(false);
       }
     } catch (err) {
       console.error("Error sending request:", err);
+      setLoading(false);
     }
   };
+  
   const generateBioInput = () => {
     const { name, subtitle, education, experience, skills } = formData;
 
@@ -81,6 +96,7 @@ Skills: ${skills}
 
     setInput(inputTemplate);
   };
+  console.log("formData", formData);
 
   console.log("Response", response);
   return (

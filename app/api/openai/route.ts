@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     if (!process.env.OPENAI_API_KEY) {
       return new Response(
-        JSON.stringify({ error: "Missing 'Hugging Face Access Token'" }),
+        JSON.stringify({ error: "Missing 'OpenAI API Key'" }),
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     console.log("Using token:", token); // Debugging line
 
-    const completion = await openai.chat.completions.create({
+    const responseStream = await openai.chat.completions.create({
       messages: [
         {
           role: "system",
@@ -40,15 +40,41 @@ export async function POST(request: Request) {
         },
         { role: "user", content: input },
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4", // Use the appropriate model
+      stream: true, // Enable streaming
     });
 
-    const data = completion.choices[0];
-    console.log("data", data);
-    const generatedText = data.message.content || "No generated text available";
-    return new Response(JSON.stringify(generatedText), {
+    const encoder = new TextEncoder();
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = responseStream[Symbol.asyncIterator]();
+
+        async function read() {
+          try {
+            const { value, done } = await reader.next();
+
+            if (done) {
+              controller.close();
+              return;
+            }
+
+            const content = value.choices[0]?.delta?.content || "";
+            console.log("content", content);
+            controller.enqueue(encoder.encode(content));
+            read();
+          } catch (error) {
+            controller.error(error);
+          }
+        }
+
+        read();
+      },
+    });
+    
+    return new Response(stream, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain",
       },
     });
   } catch (error: any) {
