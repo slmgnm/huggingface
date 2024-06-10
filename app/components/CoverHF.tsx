@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import GenerateIcon from "../../public/assets/plus-solid.svg";
+
 import RichTextEditor from "../components/RichText";
 import Loader from "./Loader";
-import Image from "next/image";
+
 import { PDFExport } from "@progress/kendo-react-pdf";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 import { useAppContext } from "@/context/AppContext";
-import { Stream } from "@mui/icons-material";
 
 type FormData = {
   name: string;
@@ -163,7 +162,8 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
 
   const pdfExportComponent = React.useRef<any>(null);
 
-  const handleExportPDF = () => {
+  const handleExportPDF = (event: React.MouseEvent) => {
+    event.preventDefault();
     const pdfName = `CoverLetter-${state.name}.pdf`;
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save(pdfName);
@@ -184,11 +184,11 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
       </button>
       <dialog
         id="my_modal_1"
-        className="modal flex justify-center items-center"
+        className="modal flex justify-center items-center "
       >
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-md shadow-md w-full max-w-3xl"
+          className="bg-white p-6 rounded-md shadow-md w-full max-w-3xl  max-h-[80vh] overflow-y-auto "
         >
           <div className="flex flex-col items-center">
             <p>{state && state?.name}</p>
@@ -201,7 +201,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
                   </label>
                   <input
                     type="text"
-                    value={state?.companyName || ""}
+                    value={state?.companyName}
                     id="companyName"
                     name="companyName"
                     className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -215,7 +215,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
                   </label>
                   <input
                     type="text"
-                    value={state?.jobTitle || ""}
+                    value={state?.jobTitle}
                     id="jobTitle"
                     name="jobTitle"
                     className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -228,7 +228,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
                   paperSize="a4"
                   fileName={`CoverLetter-${state?.name}`}
                 >
-                  <div className="relative w-full mb-4">
+                  <div className="relative w-full mb-4 pl-4">
                     <RichTextEditor
                       value={response || ""}
                       onChange={onChange}
