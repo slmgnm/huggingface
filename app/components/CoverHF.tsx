@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 
 import RichTextEditor from "../components/RichText";
@@ -27,7 +27,7 @@ type FormData = {
   companyName: string;
   jobTitle: string;
 };
-
+const isBrowser = () => typeof window !== "undefined";
 const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
@@ -175,11 +175,13 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
     <div className="flex flex-col items-left">
       <button
         className="btn btn-neutral m-3"
-        onClick={() =>
-          (
-            document.getElementById("my_modal_1") as HTMLDialogElement
-          ).showModal()
-        }
+        onClick={() => {
+          if (isBrowser()) {
+            (
+              document.getElementById("my_modal_1") as HTMLDialogElement
+            ).showModal();
+          }
+        }}
       >
         Cover Letter
       </button>
