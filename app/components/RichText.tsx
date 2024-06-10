@@ -1,9 +1,8 @@
-import exp from "constants";
-// import React, { useState } from "react";
+
 import ReactQuill from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
-// import styles from "./ritchTextEditor.module.css";
+
 import "./ql-toolbar.module.css";
 import styles from "./ritchTextEditor.module.css";
 

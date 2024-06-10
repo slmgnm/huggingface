@@ -11,7 +11,7 @@ import placeholder from "../../public/assets/user.png";
 import RichTextEditor from "../components/RichText";
 import Image from "next/image.js";
 import { useAppContext } from "../../context/AppContext";
-import CoverHF from "../components/CoverHF";
+
 type FormData = {
   name: string;
   subtitle: string;

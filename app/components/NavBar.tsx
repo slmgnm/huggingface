@@ -1,6 +1,9 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useAppContext } from "@/context/AppContext";
-import CoverHF from "./CoverHF";
+const CoverHF = dynamic(() => import("./CoverHF"), {
+  ssr: false,
+});
 import Theme from "./Theme";
 
 export default function NavBar(): JSX.Element {

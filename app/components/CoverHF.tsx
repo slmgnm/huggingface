@@ -27,7 +27,7 @@ type FormData = {
   companyName: string;
   jobTitle: string;
 };
-const isBrowser = () => typeof window !== "undefined";
+
 const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
@@ -176,11 +176,9 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
       <button
         className="btn btn-neutral m-3"
         onClick={() => {
-          if (isBrowser()) {
-            (
-              document.getElementById("my_modal_1") as HTMLDialogElement
-            ).showModal();
-          }
+          (
+            document.getElementById("my_modal_1") as HTMLDialogElement
+          ).showModal();
         }}
       >
         Cover Letter
