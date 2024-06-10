@@ -19,7 +19,8 @@
     "openai": "^4.47.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-quill": "^2.0.0"
+    "react-quill": "^2.0.0",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
