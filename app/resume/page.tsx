@@ -32,7 +32,10 @@ type FormData = {
 };
 export default function CVForm() {
   const pdfExportComponent = useRef(null);
-  const storedData = localStorage.getItem("formData");
+  let storedData;
+  if (typeof window !== "undefined") {
+    storedData = window.localStorage.getItem("formData");
+  }
   const { state, setState } = useAppContext();
   const initialFormData = storedData
     ? JSON.parse(storedData)
