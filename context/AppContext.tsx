@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useState, ReactNode, useContext } from "react";
+import "react-quill/dist/quill.snow.css";
 
 interface AppContextProps {
   state: any;
