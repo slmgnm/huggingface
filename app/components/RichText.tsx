@@ -1,11 +1,12 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import "./ql-toolbar.module.css";
 import styles from "./ritchTextEditor.module.css";
 
-
+// Dynamically import ReactQuill with SSR disabled
+// import ReactQuill from "react-quill";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const RichTextEditor = ({
@@ -17,13 +18,6 @@ const RichTextEditor = ({
   onChange: (newValue: string) => void;
   placeholder: string;
 }) => {
-  const [editorLoaded, setEditorLoaded] = useState(false);
-
-  useEffect(() => {
-    // This will set editorLoaded to true after the component mounts
-    setEditorLoaded(true);
-  }, []);
-
   const handleEditorChange = (
     newValue: string,
     _delta: any,
@@ -33,12 +27,6 @@ const RichTextEditor = ({
     onChange(newValue);
   };
 
-  // Render a placeholder or loading spinner until the editor is loaded
-  if (!editorLoaded) {
-    return <div>Loading editor...</div>;
-  }
-
-  // Render the editor once it's loaded
   return (
     <div className="richTextEditorContainer">
       <ReactQuill
@@ -46,6 +34,7 @@ const RichTextEditor = ({
         value={value}
         onChange={handleEditorChange}
         placeholder={placeholder}
+        theme="snow"
       />
     </div>
   );
