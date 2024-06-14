@@ -7,8 +7,9 @@ const CoverHF = dynamic(() => import("./CoverHF"), {
 import Theme from "./Theme";
 
 export default function NavBar(): JSX.Element {
-  const { state, setState } = useAppContext();
+  const { state, setState, changeTheme } = useAppContext();
   console.log("state in nav", state);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target) {
       console.error("Event target is undefined");
@@ -25,7 +26,7 @@ export default function NavBar(): JSX.Element {
   return (
     <div className="navbar bg-gray-100">
       <a className="btn btn-ghost text-xl">Cv Builder</a>
-      <Theme />
+      <Theme changeTheme= {changeTheme} />
       <CoverHF onChange={handleInputChange} />
     </div>
   );

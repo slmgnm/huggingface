@@ -4,7 +4,10 @@ import "react-quill/dist/quill.snow.css";
 
 interface AppContextProps {
   state: any;
+  theme: string;
   setState: React.Dispatch<React.SetStateAction<any>>;
+
+  changeTheme: (event?: any) => void;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -13,11 +16,23 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<any>(() => {
     null;
   });
+  const [theme, setTheme] = useState<string>(
+    () => localStorage.getItem("data-theme") || "luxury"
+  );
+  const changeTheme = (event?: any) => {
+    const nextTheme: string | null = event.target.value || null;
+    if (nextTheme) {
+      setTheme(nextTheme);
+    } else {
+      setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    }
+  };
 
   console.log("state", state);
+  console.log("theme", theme);
 
   return (
-    <AppContext.Provider value={{ state, setState }}>
+    <AppContext.Provider value={{ state, setState, theme, changeTheme }}>
       {children}
     </AppContext.Provider>
   );

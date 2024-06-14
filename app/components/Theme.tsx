@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Theme() {
+export default function Theme({ changeTheme }: { changeTheme: any }) {
   return (
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-neutral m-3">
@@ -26,6 +26,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Luxury"
             value="luxury"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -35,6 +36,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Retro"
             value="retro"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -44,6 +46,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Dim"
             value="dim"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -62,6 +65,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Night"
             value="night"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -71,6 +75,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Dark"
             value="dark"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -80,6 +85,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Nord"
             value="nord"
+            onClick={changeTheme}
           />
         </li>
         <li>
@@ -89,6 +95,7 @@ export default function Theme() {
             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
             aria-label="Aqua"
             value="aqua"
+            onClick={changeTheme}
           />
         </li>
       </ul>

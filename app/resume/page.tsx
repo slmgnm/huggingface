@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 // import "../components/PDForm.css";
 import { PDFExport } from "@progress/kendo-react-pdf";
+
 import BioHF from "../components/BioHF";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -36,7 +37,7 @@ export default function CVForm() {
   if (typeof window !== "undefined") {
     storedData = window.localStorage.getItem("formData");
   }
-  const { state, setState } = useAppContext();
+  const { state, setState, theme } = useAppContext();
   const initialFormData = storedData
     ? JSON.parse(storedData)
     : {
@@ -63,8 +64,13 @@ export default function CVForm() {
     localStorage.setItem("formData", JSON.stringify(formData));
     setState(formData);
   }, [formData]);
+  useEffect(() => {
+    localStorage.setItem("data-theme", theme);
+  }, [theme]);
+
   console.log("formData", formData);
   console.log("state", state);
+  console.log("theme", theme);
 
   const handleLinkChange = (socialMedia: string, link: string) => {
     setFormData((prevData: any) => ({
@@ -202,15 +208,17 @@ export default function CVForm() {
           onChange={handleInputChange}
         />
       </div> */}
+
       <PDFExport
         ref={pdfExportComponent}
         paperSize="auto"
         fileName={`${formData?.name}-Resume`}
+        // data-theme={() => theme === "luxury"}
       >
         <div className="flex flex-row min-h-screen w-[8.5in] mx-auto">
           <div
-            data-theme="base"
-            className="flex flex-col w-[30%] max-w-[30%] bg-base-100 text-base pt-24 pb-24"
+            data-theme={theme}
+            className={`flex flex-col w-[30%] max-w-[30%] bg-${theme}-100 text-base pt-24 pb-24`}
           >
             <div className="relative overflow-hidden w-full border-dashed border-yellow-600 ">
               <Image
@@ -222,6 +230,7 @@ export default function CVForm() {
               />
               <label className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
                 <input
+                
                   type="file"
                   id="image"
                   name="image"
@@ -236,13 +245,13 @@ export default function CVForm() {
               </label>
             </div>
 
-            <div data-theme="base" className="pt-4 pl-4 pr-4 text-left">
-              <div className="flex flex-row mb-0.5">
+            <div className="pt-4 pl-4 pr-4 text-left" >
+               <div className="flex flex-row mb-0.5">
                 <input
                   className="bg-base-100  border-none mb-0.5 text-2xl w-full"
                   type="text"
                   name="name"
-                  aria-label="dark"
+                  aria-label="base"
                   placeholder="name"
                   value={formData.name}
                   onChange={handleInputChange}
