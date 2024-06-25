@@ -16,9 +16,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<any>(() => {
     null;
   });
-  const [theme, setTheme] = useState<string>(
-    () => localStorage.getItem("data-theme") || "luxury"
-  );
+  const [theme, setTheme] = useState<string>("luxury");
   const changeTheme = (event?: any) => {
     const nextTheme: string | null = event.target.value || null;
     if (nextTheme) {
