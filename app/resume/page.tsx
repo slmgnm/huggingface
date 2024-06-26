@@ -228,9 +228,8 @@ export default function CVForm() {
                 width={400}
                 height={400}
               />
-              <label className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
+              <label className="absolute top-0 -0 w-full h-full flex justify-center items-cleftenter bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
                 <input
-                
                   type="file"
                   id="image"
                   name="image"
@@ -245,8 +244,8 @@ export default function CVForm() {
               </label>
             </div>
 
-            <div className="pt-4 pl-4 pr-4 text-left" >
-               <div className="flex flex-row mb-0.5">
+            <div className="pt-4 pl-4 pr-4 text-left">
+              <div className="flex flex-row mb-0.5">
                 <input
                   className="bg-base-100  border-none mb-0.5 text-2xl w-full"
                   type="text"
@@ -338,7 +337,10 @@ export default function CVForm() {
               <hr className="border-primary mt-1 mb-1" />
             </div>
           </div>
-          <div className="w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border">
+          <div
+            data-theme={theme}
+            className="w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border"
+          >
             <div className="mb-20">
               <h1 className="text-xl">Bio</h1>
               <hr className="border-primary mt-1 mb-1" />

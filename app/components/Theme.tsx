@@ -17,87 +17,29 @@ export default function Theme({ changeTheme }: { changeTheme: any }) {
       </div>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
+        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box"
       >
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Luxury"
-            value="luxury"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Retro"
-            value="retro"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Dim"
-            value="dim"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Coffee"
-            value="coffee"
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Night"
-            value="night"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Dark"
-            value="dark"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Nord"
-            value="nord"
-            onClick={changeTheme}
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Aqua"
-            value="aqua"
-            onClick={changeTheme}
-          />
-        </li>
+        {[
+          "luxury",
+          "retro",
+          "dim",
+          "coffee",
+          "night",
+          "dark",
+          "nord",
+          "aqua",
+        ].map((theme) => (
+          <li key={theme}>
+            <input
+              type="radio"
+              name="theme-dropdown"
+              className="theme-controller btn btn-sm btn-ghost justify-start w-full "
+              aria-label={theme.charAt(0).toUpperCase() + theme.slice(1)}
+              value={theme}
+              onClick={changeTheme}
+            />
+          </li>
+        ))}
       </ul>
     </div>
   );

@@ -14,7 +14,7 @@
     "@mui/icons-material": "^5.15.17",
     "@progress/kendo-react-pdf": "^8.0.0",
     "axios": "^1.6.8",
-    "daisyui": "^4.11.1",
+    "daisyui": " 3.9.4",
     "next": "14.2.3",
     "openai": "^4.47.1",
     "react": "^18",
