@@ -201,21 +201,12 @@ export default function CVForm() {
 
   return (
     <div className="flex flex-col items-center pt-24">
-      {/* <div className="flex flex-col items-start">
-        <CoverHF
-          formData={formData}
-          setFormData={setFormData}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
       <PDFExport
         ref={pdfExportComponent}
         paperSize="auto"
         fileName={`${formData?.name}-Resume`}
-        // data-theme={() => theme === "luxury"}
       >
-        <div className="flex flex-row min-h-screen w-[8.5in] mx-auto">
+        <div className="flex flex-row min-h-screen w-full max-w-[8.5in] mx-auto">
           <div
             data-theme={theme}
             className={`flex flex-col w-[30%] max-w-[30%] bg-${theme}-100 text-base pt-24 pb-24`}
@@ -339,7 +330,7 @@ export default function CVForm() {
           </div>
           <div
             data-theme={theme}
-            className="w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border"
+            className="w-[70%] max-w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border sm:w-full"
           >
             <div className="mb-20">
               <h1 className="text-xl">Bio</h1>
