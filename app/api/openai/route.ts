@@ -1,9 +1,22 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI();
-
 export async function POST(request: Request) {
   try {
+    // Check for API key first
+    if (!process.env.OPENAI_API_KEY) {
+      return new Response(
+        JSON.stringify({ error: "OpenAI API key is not configured. Please add OPENAI_API_KEY to your .env.local file." }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
     const requestBody = await request.json();
 
     if (!requestBody.inputs) {
@@ -16,20 +29,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "Missing 'OpenAI API Key'" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     const input = requestBody.inputs;
-    const token = process.env.OPENAI_API_KEY;
-
-    console.log("Using token:", token); // Debugging line
 
     const responseStream = await openai.chat.completions.create({
       messages: [
@@ -79,8 +79,25 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error("Server Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+
+    let errorMessage = "An unexpected error occurred";
+    let statusCode = 500;
+
+    if (error?.status === 401 || error?.code === "invalid_api_key") {
+      errorMessage = "Invalid OpenAI API key. Please check your API key in .env.local";
+      statusCode = 401;
+    } else if (error?.status === 429) {
+      errorMessage = "Rate limit exceeded. Please try again later.";
+      statusCode = 429;
+    } else if (error?.status === 503) {
+      errorMessage = "OpenAI service is temporarily unavailable. Please try again later.";
+      statusCode = 503;
+    } else if (error?.message) {
+      errorMessage = error.message;
+    }
+
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: statusCode,
       headers: { "Content-Type": "application/json" },
     });
   }

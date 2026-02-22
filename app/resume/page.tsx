@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-// import "../components/PDForm.css";
+import { toast } from "react-toastify";
 import { PDFExport } from "@progress/kendo-react-pdf";
 
 import BioHF from "../components/BioHF";
@@ -182,11 +182,15 @@ export default function CVForm() {
   };
 
   const handleExportPDF = () => {
+    if (!formData.name) {
+      toast.warning("Please add your name before exporting");
+      return;
+    }
     const pdfName = `CV-${formData.name}.pdf`;
     if (pdfExportComponent.current) {
       (pdfExportComponent.current as any).save(pdfName);
+      toast.success("CV exported as PDF!");
     }
-    // console.log("current", pdfExportComponent.current);
   };
   const removeField = (fieldName: any, index: number) => {
     setFormData((prevState: any) => {
@@ -209,7 +213,7 @@ export default function CVForm() {
         <div className="flex flex-row min-h-screen w-full max-w-[8.5in] mx-auto">
           <div
             data-theme={theme}
-            className={`flex flex-col w-[30%] max-w-[30%] bg-${theme}-100 text-base pt-24 pb-24`}
+            className="flex flex-col w-[30%] max-w-[30%] bg-base-100 text-base-content pt-24 pb-24"
           >
             <div className="relative overflow-hidden w-full border-dashed border-yellow-600 ">
               <Image
@@ -265,7 +269,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-base-content border-none w-full mb-0.5 text-base"
                   type="text"
                   name="address"
                   placeholder="address"
@@ -275,7 +279,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-base-content border-none w-full mb-0.5 text-base"
                   type="text"
                   name="email"
                   placeholder="email"
@@ -285,7 +289,7 @@ export default function CVForm() {
               </div>
               <div className="flex flex-row mb-0.5">
                 <input
-                  className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
+                  className="bg-base-100 text-base-content border-none w-full mb-0.5 text-base"
                   type="text"
                   name="phone"
                   placeholder="phone"
@@ -299,7 +303,7 @@ export default function CVForm() {
                 {formData.languages.map((language: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
-                      className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
+                      className="bg-base-100 text-base-content border-none w-full mb-0.5 text-base"
                       type="text"
                       name={`language-${index}`}
                       value={language}
@@ -315,7 +319,7 @@ export default function CVForm() {
                 {formData.skills?.map((skill: any, index: number) => (
                   <div key={index} className="flex flex-row mb-0.5">
                     <input
-                      className="bg-base-100 text-white border-none w-full mb-0.5 text-base"
+                      className="bg-base-100 text-base-content border-none w-full mb-0.5 text-base"
                       type="text"
                       name={`skill-${index}`}
                       value={skill}
@@ -330,18 +334,18 @@ export default function CVForm() {
           </div>
           <div
             data-theme={theme}
-            className="w-[70%] max-w-[70%] pl-8 pr-8 pt-24 bg-gray-200 box-border sm:w-full"
+            className="w-[70%] max-w-[70%] pl-8 pr-8 pt-24 bg-slate-100 text-slate-800 box-border sm:w-full"
           >
             <div className="mb-20">
               <h1 className="text-xl">Bio</h1>
-              <hr className="border-primary mt-1 mb-1" />
+              <hr className="border-slate-400 mt-1 mb-1" />
               <div>
                 <BioHF formData={formData} onChange={handleBio} />
               </div>
             </div>
             <div className="group mb-20">
               <h1 className="text-xl">Experience</h1>
-              <hr className="border-primary mt-1 mb-1" />
+              <hr className="border-slate-400 mt-1 mb-1" />
               {formData?.experience?.map((exp: any, index: number) => (
                 <div className=" flex flex-row mb-1 relative" key={index}>
                   <RichTextEditor
@@ -362,7 +366,7 @@ export default function CVForm() {
             </div>
             <div className="pb-16 group">
               <h1 className="text-xl">Education</h1>
-              <hr className="border-primary mt-1 mb-1" />
+              <hr className="border-slate-400 mt-1 mb-1" />
               {formData?.education?.map((edu: any, index: number) => (
                 <div className="flex flex-row mb-1 relative " key={index}>
                   <RichTextEditor

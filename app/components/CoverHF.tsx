@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import RichTextEditor from "../components/RichText";
 import Loader from "./Loader";
@@ -32,7 +33,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
-  const { state, setState } = useAppContext();
+  const { state, setState, theme } = useAppContext();
   console.log("state in coverHF:", state);
   useEffect(() => {
     if (input === "" && state) {
@@ -44,9 +45,21 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    // Validate required fields
+    if (!state?.companyName || !state?.jobTitle) {
+      toast.warning("Please enter company name and job title first");
+      return;
+    }
+
+    if (!state?.name || !state?.experience?.length) {
+      toast.warning("Please fill in your CV details first (name, experience)");
+      return;
+    }
+
     try {
       setLoading(true);
-      setResponse(""); // Clear the previous response
+      setResponse("");
+      toast.info("Generating your cover letter...", { autoClose: 2000 });
 
       const res = await fetch("/api/openai", {
         method: "POST",
@@ -57,7 +70,7 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
         body: JSON.stringify({
           inputs: input,
           tokens: 200,
-          stream: true, // Enable streaming
+          stream: true,
         }),
       });
 
@@ -65,7 +78,6 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
 
-        // Continuously read and append chunks to the response
         while (true) {
           const { value, done } = await reader.read();
           if (done) break;
@@ -74,14 +86,21 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
         }
 
         setLoading(false);
+        toast.success("Cover letter generated successfully!");
       } else {
         const errorDetail = await res.json();
         console.error("Error sending request:", errorDetail);
         setLoading(false);
+        toast.error(errorDetail?.error || "Failed to generate cover letter. Please try again.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error sending request:", err);
       setLoading(false);
+      if (err?.name === "TypeError" && err?.message?.includes("fetch")) {
+        toast.error("Network error. Please check your connection.");
+      } else {
+        toast.error(err?.message || "An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -165,10 +184,19 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
 
   const handleExportPDF = (event: React.MouseEvent) => {
     event.preventDefault();
+    if (!response) {
+      toast.warning("Please generate a cover letter first");
+      return;
+    }
     const pdfName = `CoverLetter-${state.name}.pdf`;
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save(pdfName);
+      toast.success("Cover letter exported as PDF!");
     }
+  };
+
+  const closeModal = () => {
+    (document.getElementById("my_modal_1") as HTMLDialogElement).close();
   };
 
   return (
@@ -185,84 +213,143 @@ const CoverHF = ({ onChange }: { onChange: (value: any) => void }) => {
       </button>
       <dialog
         id="my_modal_1"
-        className="modal flex justify-center items-center "
+        className="modal modal-bottom sm:modal-middle"
       >
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-md shadow-md w-full max-w-3xl  max-h-[80vh] overflow-y-auto "
+        <div
+          data-theme={theme}
+          className="modal-box bg-base-100 text-base-content w-full max-w-4xl max-h-[90vh] p-0 overflow-hidden"
         >
-          <div className="flex flex-col items-center">
-            <p>{state && state?.name}</p>
-            <div className="flex flex-col items-center">
-              <h1 className="text-4xl font-bold mb-4">Cover Letter</h1>
-              <div className="flex flex-col items-center w-full">
-                <div className="mb-4 w-full">
-                  <label htmlFor="companyName" className="text-lg font-medium">
-                    Company Name:
-                  </label>
-                  <input
-                    type="text"
-                    value={state?.companyName}
-                    id="companyName"
-                    name="companyName"
-                    className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter company name"
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="mb-4 w-full">
-                  <label htmlFor="jobTitle" className="text-lg font-medium">
-                    Job Title:
-                  </label>
-                  <input
-                    type="text"
-                    value={state?.jobTitle}
-                    id="jobTitle"
-                    name="jobTitle"
-                    className="border border-gray-300 rounded-md px-3 py-2 mt-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter job title"
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <PDFExport
-                  ref={pdfExportComponent}
-                  paperSize="a4"
-                  fileName={`CoverLetter-${state?.name}`}
-                >
-                  <div className="relative w-full mb-4 pl-4">
-                    <RichTextEditor
-                      value={response || ""}
-                      onChange={onChange}
-                      placeholder={`Click on the 🤖 to add an AI-generated bio after filling other fields or write your own`}
-                    />
-                    <button
-                      type="submit"
-                      id="bioSubmit"
-                      className="absolute top-0 right-0 mt-2 mr-2"
-                    >
-                      {loading ? (
-                        <Loader />
-                      ) : (
-                        <AutoAwesomeIcon
-                          component="svg"
-                          style={{ width: 20, height: 20 }}
-                        />
-                      )}
-                    </button>
-                  </div>
-                </PDFExport>
+          {/* Header with close button */}
+          <div className="sticky top-0 z-10 bg-base-200 px-6 py-4 border-b border-base-300 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">Cover Letter Generator</h1>
+            <button
+              type="button"
+              className="btn btn-sm btn-circle btn-ghost"
+              onClick={closeModal}
+            >
+              ✕
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            {/* Input fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="form-control w-full">
+                <label className="label" htmlFor="companyName">
+                  <span className="label-text font-medium">Company Name</span>
+                </label>
+                <input
+                  type="text"
+                  value={state?.companyName || ""}
+                  id="companyName"
+                  name="companyName"
+                  className="input input-bordered w-full"
+                  placeholder="Enter company name"
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-control w-full">
+                <label className="label" htmlFor="jobTitle">
+                  <span className="label-text font-medium">Job Title</span>
+                </label>
+                <input
+                  type="text"
+                  value={state?.jobTitle || ""}
+                  id="jobTitle"
+                  name="jobTitle"
+                  className="input input-bordered w-full"
+                  placeholder="Enter job title"
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
 
-            <div className="pt-4 pb-4">
+            {/* Generate button */}
+            <div className="flex justify-center mb-4">
               <button
-                className="block h-fit shadow-none border-0 px-8 py-4 bg-gray-800 rounded-md text-white text-sm font-medium text-center cursor-pointer transition-all duration-200 ease-in-out"
-                onClick={handleExportPDF}
+                type="submit"
+                className="btn btn-primary gap-2"
+                disabled={loading}
               >
-                Export Cover Letter as PDF
+                {loading ? (
+                  <>
+                    <Loader />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <AutoAwesomeIcon style={{ width: 20, height: 20 }} />
+                    Generate with AI
+                  </>
+                )}
               </button>
             </div>
+
+            {/* Cover Letter Preview - Professional paper style */}
+            <div className="bg-base-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-base-content/70 mb-2">Preview</p>
+              <PDFExport
+                ref={pdfExportComponent}
+                paperSize="a4"
+                fileName={`CoverLetter-${state?.name}`}
+                margin={{ top: 40, left: 40, right: 40, bottom: 40 }}
+              >
+                <div className="bg-slate-50 text-slate-800 p-8 min-h-[400px] shadow-md rounded">
+                  {/* Letter header */}
+                  <div className="mb-6 text-sm">
+                    <p className="font-semibold text-lg">{state?.name || "Your Name"}</p>
+                    {state?.address && <p>{state.address}</p>}
+                    {state?.email && <p>{state.email}</p>}
+                    {state?.phone && <p>{state.phone}</p>}
+                    <p className="mt-2 text-slate-500">
+                      {new Date().toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+
+                  {state?.companyName && (
+                    <div className="mb-6 text-sm">
+                      <p className="font-medium">{state.companyName}</p>
+                    </div>
+                  )}
+
+                  {/* Letter content */}
+                  <div className="max-w-none text-sm leading-relaxed">
+                    <RichTextEditor
+                      value={response || ""}
+                      onChange={onChange}
+                      placeholder="Click 'Generate with AI' to create your cover letter, or write your own here..."
+                    />
+                  </div>
+                </div>
+              </PDFExport>
+            </div>
+          </form>
+
+          {/* Footer with export button */}
+          <div className="sticky bottom-0 bg-base-200 px-6 py-4 border-t border-base-300 flex justify-end gap-2">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn btn-neutral"
+              onClick={handleExportPDF}
+            >
+              Export as PDF
+            </button>
           </div>
+        </div>
+        {/* Backdrop that closes modal on click */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
         </form>
       </dialog>
     </div>

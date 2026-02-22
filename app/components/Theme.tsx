@@ -25,7 +25,7 @@ export default function Theme({ changeTheme }: { changeTheme: any }) {
           "dim",
           "coffee",
           "night",
-          "dark",
+          "dracula",
           "nord",
           "aqua",
         ].map((theme) => (

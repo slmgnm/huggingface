@@ -7,7 +7,7 @@ const CoverHF = dynamic(() => import("./CoverHF"), {
 import Theme from "./Theme";
 
 export default function NavBar(): JSX.Element {
-  const { state, setState, changeTheme } = useAppContext();
+  const { state, setState, changeTheme, theme } = useAppContext();
   console.log("state in nav", state);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +24,7 @@ export default function NavBar(): JSX.Element {
   };
 
   return (
-    <div className="navbar bg-gray-100">
+    <div data-theme={theme} className="navbar bg-base-300 text-base-content">
       <a className="btn btn-ghost text-xl">Cv Builder</a>
       <Theme changeTheme= {changeTheme} />
       <CoverHF onChange={handleInputChange} />

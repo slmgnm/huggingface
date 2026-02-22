@@ -1,11 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-import GenerateIcon from "../../public/assets/plus-solid.svg";
 import RichTextEditor from "../components/RichText";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import Loader from "./Loader";
-import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 
 const BioHF = ({
@@ -28,11 +26,18 @@ const BioHF = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-  
+
+    // Validate required fields
+    if (!formData?.name || !formData?.experience?.length) {
+      toast.warning("Please fill in your name and experience first");
+      return;
+    }
+
     try {
       setLoading(true);
-      setResponse(''); // Clear the previous response
-  
+      setResponse("");
+      toast.info("Generating your bio...", { autoClose: 2000 });
+
       const res = await fetch("/api/openai", {
         method: "POST",
         headers: {
@@ -44,13 +49,13 @@ const BioHF = ({
           tokens: 200,
         }),
       });
-  
+
       if (res.ok && res.body) {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
-        let result = '';
+        let result = "";
         let done = false;
-  
+
         while (!done) {
           const { value, done: doneReading } = await reader.read();
           done = doneReading;
@@ -58,16 +63,23 @@ const BioHF = ({
           setResponse((prev) => prev + result);
           onChange(result);
         }
-  
+
         setLoading(false);
+        toast.success("Bio generated successfully!");
       } else {
         const errorDetail = await res.json();
         console.error("Error sending request:", errorDetail);
         setLoading(false);
+        toast.error(errorDetail?.error || "Failed to generate bio. Please try again.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error sending request:", err);
       setLoading(false);
+      if (err?.name === "TypeError" && err?.message?.includes("fetch")) {
+        toast.error("Network error. Please check your connection.");
+      } else {
+        toast.error(err?.message || "An unexpected error occurred. Please try again.");
+      }
     }
   };
   

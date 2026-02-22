@@ -5,10 +5,10 @@ import { useAppContext } from "@/context/AppContext";
 import NavBar from "./components/NavBar";
 
 export default function Home() {
-  const { state } = useAppContext();
+  const { state, theme } = useAppContext();
   console.log("state", state);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between ">
+    <main data-theme={theme} className="flex min-h-screen flex-col items-center justify-between bg-base-300">
       <NavBar />
       <Resume />
     </main>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { AppProvider } from "../context/AppContext";
 import { Inter } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import "./PDFForm.css";
 
@@ -20,8 +22,18 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppProvider>
-          
-        {/* <NavBar/> */}
+          <ToastContainer
+            position="top-right"
+            autoClose={4000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
           {children}
         </AppProvider>
       </body>
